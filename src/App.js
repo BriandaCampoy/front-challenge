@@ -27,35 +27,24 @@ const App = () => {
   };
 
   const updateMoveable = (id, newComponent, updateEnd = false) => {
-    // let parent = document.getElementById('parent');
-    // let parentBounds = parent?.getBoundingClientRect();
-    // if((newComponent.left+newComponent.width+parentBounds.left)>=(parentBounds.right-parentBounds.left)){
-    //   console.log(newComponent, parentBounds);
-      
-    // }else if((newComponent.top+newComponent.height+parentBounds.left)>=(parentBounds.height)){
-    //   console.log(newComponent, parentBounds);
-    // }else if(newComponent.top<0 || newComponent.left<0){
-    //   console.log('rompiendo por arriba');
-    //   console.log(newComponent, parentBounds);
-    // }else{
-      const updatedMoveables = moveableComponents.map((moveable, i) => {
-        if (moveable.id === id) {
-          return { id, ...newComponent, updateEnd };
-        }
-        return moveable;
-      });
-      setMoveableComponents(updatedMoveables);
+    const updatedMoveables = moveableComponents.map((moveable, i) => {
+      if (moveable.id === id) {
+        return { id, ...newComponent, updateEnd };
+      }
+      return moveable;
+    });
+    setMoveableComponents(updatedMoveables);
     // };
-  }
-    
-    const handleResizeStart = (index, e) => {
-      console.log('e', e.direction);
-      // Check if the resize is coming from the left handle
-      const [handlePosX, handlePosY] = e.direction;
-      // 0 => center
-      // -1 => top or left
-      // 1 => bottom or right
-      
+  };
+
+  const handleResizeStart = (index, e) => {
+    console.log('e', e.direction);
+    // Check if the resize is coming from the left handle
+    const [handlePosX, handlePosY] = e.direction;
+    // 0 => center
+    // -1 => top or left
+    // 1 => bottom or right
+
     // -1, -1
     // -1, 0
     // -1, 1
@@ -211,10 +200,12 @@ const Component = ({
   const handleDrag = (e) => {
     let parent = document.getElementById('parent');
     let parentBounds = parent?.getBoundingClientRect();
-   if(
-    !((e.left+width+parentBounds.left)>=(parentBounds.right-parentBounds.left))
-    &&!((e.top+height+parentBounds.left)>=(parentBounds.height))
-    &&!(e.top<0 || e.left<0)){ 
+    if (
+      e.left + width +parentBounds.left <= parentBounds.right &&
+      e.top + height +parentBounds.top<= parentBounds.bottom &&
+      e.top >= 0 &&
+      e.left >= 0
+    )  {
       updateMoveable(id, {
         top: e.top,
         left: e.left,
@@ -224,7 +215,7 @@ const Component = ({
         image
       });
     }
-  }
+  };
 
   return (
     <>
@@ -267,7 +258,6 @@ const Component = ({
 
 const ComponentList = ({ list, setList, select }) => {
   function handleDeleteComponent(id) {
-    console.log(id);
     const newList = list.filter((item) => item.id !== id);
     setList(newList);
   }
