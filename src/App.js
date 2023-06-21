@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Moveable from 'react-moveable';
 import './styles.css';
+let image = 1;
 
 const App = () => {
   const [moveableComponents, setMoveableComponents] = useState([]);
@@ -10,7 +11,8 @@ const App = () => {
   const addMoveable = async () => {
     // Create a new moveable component and add it to the array
     // const COLORS = ["red", "blue", "yellow", "green", "purple"];
-    const Image = await getImage(moveableComponents.length + 1);
+    const Image = await getImage(image);
+    image++;
     setMoveableComponents([
       ...moveableComponents,
       {
